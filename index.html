@@ -272,7 +272,7 @@ function handleAuth() {
 }
 function setAuthUI(c) {
   document.getElementById("authDot").className    = "authdot" + (c ? " connected" : "");
-  document.getElementById("authLabel").textContent = c ? "Connecte a Google" : "Non connecte a Google";
+  document.getElementById("authLabel").textContent = c ? "Connecté à Google" : "Non connecté à Google";
   document.getElementById("authBtn").textContent   = c ? "Deconnecter" : "Se connecter a Google";
   document.getElementById("authBtn").className     = c ? "authbtn disconnect" : "authbtn";
 }
