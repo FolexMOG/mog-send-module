@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root{--lac:#0057A8;--lac-l:#1a6fc4;--one:#E8001D;--one-l:#ff1f3a;--dark:#0a0a0f;--surf:#111118;--card:#16161f;--card2:#1c1c27;--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.12);--txt:#f0f0f5;--mut:rgba(240,240,245,.42);--ok:#00c47a;--warn:#f5a623}
+:root{--lac:#0057A8;--lac-l:#1a6fc4;--one:#E8001D;--one-l:#ff1f3a;--dark:#0a0a0f;--surf:#11f1118;--card:#16161f;--card2:#1c1c27;--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.12);--txt:#f0f0f5;--mut:rgba(240,240,245,.42);--ok:#00c47a;--warn:#f5a623}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--dark);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
@@ -273,7 +273,7 @@ function handleAuth() {
 function setAuthUI(c) {
   document.getElementById("authDot").className    = "authdot" + (c ? " connected" : "");
   document.getElementById("authLabel").textContent = c ? "Connecté à Google" : "Non connecté à Google";
-  document.getElementById("authBtn").textContent   = c ? "Deconnecter" : "Se connecter a Google";
+  document.getElementById("authBtn").textContent   = c ? "Déconnecter" : "Se connecter à Google";
   document.getElementById("authBtn").className     = c ? "authbtn disconnect" : "authbtn";
 }
 
