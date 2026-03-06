@@ -225,6 +225,9 @@ select option{background:#1a1a2e}
         <textarea id="mailContent" placeholder="!!! Hello/Bonjour et félicitations [Pr&#233;nom] déjà inséré !!!&#10;&#10;Commencer par exemple par: Voici tes/vos billets pour...&#10;&#10;&#192; bient&#244;t sur les ondes !"></textarea>
       </div>
     </div>
+    <div style="margin-top:12px;">
+  <button class="rsetb" onclick="resetForm()">&#8635; Réinitialiser</button>
+</div>
     <div class="sep"></div>
     <div class="sec">Destinataires &mdash; gagnants <span class="cbadge" id="cbadge">0</span></div>
     <div class="start-row">
@@ -238,10 +241,10 @@ select option{background:#1a1a2e}
     </div>
     <div class="gblock" id="gBlock"></div>
     <button class="addb" onclick="addGagnant()">&#xFF0B; Ajouter un gagnant</button>
-    <div class="actions">
-      <button class="rsetb" onclick="resetForm()">R&eacute;initialiser</button>
-      <button class="sendb" id="btnSend" onclick="lancerEnvoi()">&#128640; LANCER &#128640;</button>
-    </div>
+    <button class="addb" onclick="effacerListe()" style="border-color:rgba(232,0,29,.3);color:rgba(255,80,80,.7);">&#128465; Effacer liste</button>
+<div class="actions">
+  <button class="sendb" id="btnSend" onclick="lancerEnvoi()">&#128640; LANCER &#128640;</button>
+</div>
     <div class="sbar" id="sbar"><div class="spin" id="spin" style="display:none"></div><span id="stxt"></span></div>
   </div>
   <div class="infobox">
@@ -569,7 +572,7 @@ function resetForm() {
   document.getElementById("mailSubject").value = "";
   document.getElementById("mailContent").value = "";
   document.getElementById("startNum").value    = "1";
-  gagnants = []; addGagnant(); setStep(1);
+  setStep(1);
   document.getElementById("sbar").className = "sbar";
 }
 // Paste depuis Excel dans les champs gagnants
@@ -612,7 +615,10 @@ document.addEventListener('paste', function(e) {
     }
   });
 });
-
+function effacerListe() {
+  gagnants = [];
+  addGagnant();
+}
 </script>
 </body>
 </html>
