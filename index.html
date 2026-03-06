@@ -408,7 +408,16 @@ function importRows(rows) {
 function getStart() { return Math.max(1, parseInt(document.getElementById("startNum").value, 10) || 1); }
 function addGagnant() { gagnants.push(Date.now() + Math.random()); renderGagnants(); }
 function removeGagnant(id) {
-  if (gagnants.length <= 1) { showStatus("warn", "Il faut au moins un destinataire."); return; }
+  if (gagnants.length <= 1) {
+    // Effacer les champs au lieu de supprimer
+    var ep = document.getElementById("pr" + id);
+    var en = document.getElementById("nm" + id);
+    var ee = document.getElementById("em" + id);
+    if (ep) ep.value = "";
+    if (en) en.value = "";
+    if (ee) ee.value = "";
+    return;
+  }
   gagnants = gagnants.filter(function(g) { return g !== id; });
   renderGagnants();
 }
