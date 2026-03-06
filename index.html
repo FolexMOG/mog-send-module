@@ -563,6 +563,34 @@ function resetForm() {
   gagnants = []; addGagnant(); setStep(1);
   document.getElementById("sbar").className = "sbar";
 }
+// Paste depuis Excel dans les champs gagnants
+document.addEventListener('paste', function(e) {
+  var active = document.activeElement;
+  if (!active || active.tagName !== 'INPUT') return;
+  if (!active.id.match(/^(pr|nm|em)/)) return;
+
+  var text = e.clipboardData.getData('text');
+  var values = text.split(/\t|\n/).map(function(v){ return v.trim(); }).filter(function(v){ return v !== ''; });
+
+  if (values.length <= 1) return;
+
+  e.preventDefault();
+
+  var suffix = active.id.replace(/^(pr|nm|em)/, '');
+  var idx = gagnants.indexOf(parseFloat(suffix));
+  if (idx === -1) return;
+
+  var fields = ['pr', 'nm', 'em'];
+  var fieldIdx = active.id.startsWith('pr') ? 0 : active.id.startsWith('nm') ? 1 : 2;
+
+  values.forEach(function(val, i) {
+    var fi = fieldIdx + i;
+    if (fi > 2) return;
+    var el = document.getElementById(fields[fi] + suffix);
+    if (el) el.value = val;
+  });
+});
+
 </script>
 </body>
 </html>
