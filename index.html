@@ -309,6 +309,27 @@ var STORAGE_KEY    = "envoi_pdf_configs";
 var gagnants       = [];
 var accessToken    = null;
 var tokenClient    = null;
+var TOKEN_KEY      = "mog_gtoken";
+var TOKEN_EXP_KEY  = "mog_gtoken_exp";
+
+function saveToken(token) {
+  var exp = Date.now() + 55 * 60 * 1000; /* 55 min */
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(TOKEN_EXP_KEY, exp);
+}
+function loadToken() {
+  var token = localStorage.getItem(TOKEN_KEY);
+  var exp   = parseInt(localStorage.getItem(TOKEN_EXP_KEY) || "0", 10);
+  if (token && Date.now() < exp) return token;
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_EXP_KEY);
+  return null;
+}
+function clearToken() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_EXP_KEY);
+}
+
 document.getElementById("logoImg").src = "https://raw.githubusercontent.com/FolexMOG/mog-send-module/ec831aef635d72626a86e03e2efef8a75757865d/One-Lac%20Shade%20Envoi.png";
 var lnk = document.createElement("link");
 lnk.rel = "icon"; lnk.type = "image/png";
@@ -354,6 +375,9 @@ window.addEventListener("load", function() {
   addGagnant();
   renderSaveSlots();
   setTimeout(drawWaveform, 60);
+  /* Restaurer le token depuis localStorage si encore valide */
+  var saved = loadToken();
+  if (saved) { accessToken = saved; setAuthUI(true); }
   var gsiCheck = setInterval(function() {
     if (window.google && window.google.accounts) {
       clearInterval(gsiCheck);
@@ -361,7 +385,7 @@ window.addEventListener("load", function() {
         client_id: CLIENT_ID, scope: SCOPES,
         callback: function(resp) {
           if (resp.error) { showStatus("error", "Erreur Google : " + resp.error); return; }
-          accessToken = resp.access_token; setAuthUI(true);
+          accessToken = resp.access_token; saveToken(accessToken); setAuthUI(true);
         }
       });
     }
@@ -369,7 +393,7 @@ window.addEventListener("load", function() {
 });
 window.addEventListener('resize', drawWaveform);
 function handleAuth() {
-  if (accessToken) { google.accounts.oauth2.revoke(accessToken, function(){}); accessToken = null; setAuthUI(false); }
+  if (accessToken) { google.accounts.oauth2.revoke(accessToken, function(){}); accessToken = null; clearToken(); setAuthUI(false); }
   else { if (tokenClient) tokenClient.requestAccessToken(); else showStatus("error", "Google Sign-In non charge."); }
 }
 function setAuthUI(c) {
