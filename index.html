@@ -48,21 +48,23 @@ input:focus,textarea:focus,select:focus{border-color:rgba(255,255,255,.28);backg
 textarea{resize:vertical;min-height:142px;line-height:1.65}
 select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(200,200,200,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
 select option{background:#2a2a2a;color:#e8e8e8}
-.drive-stats{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;min-height:26px}
+.drive-stats{display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:nowrap;min-height:26px}
 .ds-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22)}
 .ds-pill.ok{border-color:rgba(0,196,122,.3);background:rgba(0,196,122,.08);color:var(--ok)}
 .ds-pill.warn{border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.08);color:var(--warn)}
 .ds-pill.err{border-color:rgba(232,0,29,.3);background:rgba(232,0,29,.08);color:#ff6060}
 .ds-pill.loading{color:rgba(220,220,220,.4)}
 .ds-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
-.folder-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.folder-links{display:flex;flex-direction:column;gap:8px;margin-top:6px}
 .fl{font-size:12px;font-weight:500;padding:5px 10px;border-radius:6px;text-decoration:none;transition:all .2s;border:1px solid var(--bd2)}
 .fl.one{color:#ff6060;background:rgba(232,0,29,.08);border-color:rgba(232,0,29,.25)}.fl.one:hover{background:rgba(232,0,29,.18)}
 .fl.lac{color:#80b0e0;background:rgba(0,87,168,.1);border-color:rgba(0,87,168,.3)}.fl.lac:hover{background:rgba(0,87,168,.2)}
 .fl.dyn{color:#f5a623;background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.3)}.fl.dyn:hover{background:rgba(245,166,35,.16)}
+.fl-row { display: flex; align-items: center; gap: 10px; min-height: 28px; }
+.fl-lbl { font-size: 11px; color: var(--mut); text-transform: none; letter-spacing: normal; width: 105px; flex-shrink: 0; }
 .savebar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .savebar .lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-right:4px}
-.savebtn{padding:7px 14px;border-radius:8px;border:1px solid var(--bd2);background:rgba(255,255,255,.05);color:var(--mut);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.savebtn{padding:7px 14px;border-radius:8px;border:1px solid var(--bd2);background:rgba(255,255,255,.06);color:var(--txt);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .savebtn:hover{color:var(--txt);background:rgba(255,255,255,.1)}
 .savebtn.primary{border-color:rgba(0,196,122,.3);color:var(--ok);background:rgba(0,196,122,.07)}.savebtn.primary:hover{background:rgba(0,196,122,.14)}
 .save-slots{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -174,10 +176,6 @@ select option{background:#2a2a2a;color:#e8e8e8}
 .exp-ok.ready{opacity:1;pointer-events:all}.exp-ok.ready:hover{filter:brightness(1.1)}
 .exp-loading{display:flex;align-items:center;gap:8px;padding:10px 13px;font-size:12px;color:rgba(200,200,200,.35)}
 .spxs{display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid rgba(200,200,200,.1);border-top-color:rgba(200,200,200,.35);animation:sp .7s linear infinite;flex-shrink:0}
-
-/* AJOUT POUR L'ALIGNEMENT DES LIENS */
-.fl-row { display: flex; align-items: center; gap: 10px; min-height: 28px; }
-.fl-lbl { font-size: 11px; color: var(--mut); text-transform: none; letter-spacing: normal; width: 105px; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -250,8 +248,8 @@ select option{background:#2a2a2a;color:#e8e8e8}
         <div class="folder-links">
           <div class="fl-row">
             <span class="fl-lbl">Ouvrir dans Drive :</span>
-            <a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one">&#128308; Envois One</a>
-            <a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac">&#128309; Envois Lac</a>
+            <a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one">&#128308; Envois One FM</a>
+            <a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac">&#128309; Envois Radio Lac</a>
           </div>
           <div id="folderLink"></div>
         </div>
@@ -595,7 +593,10 @@ async function scanDossier() {
     box.innerHTML = '<span class="ds-pill warn"><span class="ds-dot"></span>Connecte-toi &agrave; Google</span>';
     return;
   }
-  box.innerHTML = '<span class="ds-pill loading"><span class="ds-dot" style="animation:sp .7s linear infinite;border:2px solid rgba(220,220,220,.15);border-top-color:currentColor;border-radius:50%;width:8px;height:8px;background:none"></span>Scan en cours&hellip;</span>';
+  
+  // Alignement statique du chargement
+  box.innerHTML = '<div class="fl-row"><span class="fl-lbl"></span><span class="ds-pill loading"><span class="ds-dot" style="animation:sp .7s linear infinite;border:2px solid rgba(220,220,220,.15);border-top-color:currentColor;border-radius:50%;width:8px;height:8px;background:none"></span>Scan en cours&hellip;</span></div>';
+
   try {
     var allFiles = [];
     var pageToken = "";
@@ -632,6 +633,8 @@ async function scanDossier() {
       var baseName = restants[0].replace(/-\d+$/, "");
       document.getElementById("pdfName").value = baseName;
     }
+    
+    // CONSTRUCTION DE LA LIGNE DE STATS ALIGNÉE
     var pillNext = (prochain !== null && stock > 0)
       ? '<span class="ds-pill ok"><span class="ds-dot"></span>Prochain n&deg; : <strong style="margin-left:3px">' + prochain + '</strong></span>'
       : '';
@@ -639,9 +642,10 @@ async function scanDossier() {
       ? '<span class="ds-pill ok"><span class="ds-dot"></span>' + stock + ' PDF disponible' + (stock > 1 ? 's' : '') + '</span>'
       : '<span class="ds-pill err"><span class="ds-dot"></span>0 PDF disponible</span>';
     var pillUtil = '<span class="ds-pill" style="color:rgba(200,200,200,.45)"><span class="ds-dot"></span>' + utilises + '&nbsp;/&nbsp;' + total + ' utilis&eacute;' + (utilises > 1 ? 's' : '') + '</span>';
-    box.innerHTML = pillNext + pillStock + pillUtil;
     
-    // MISE À JOUR ALIGNEMENT ET TEXTE
+    // Injection avec le spacer fl-lbl pour l'alignement
+    box.innerHTML = '<div class="fl-row"><span class="fl-lbl"></span>' + pillNext + pillStock + pillUtil + '</div>';
+    
     try {
       var metaUrl = "https://www.googleapis.com/drive/v3/files/" + fid + "?fields=name&supportsAllDrives=true";
       var metaResp = await fetch(metaUrl, { headers: { Authorization: "Bearer " + accessToken } });
@@ -649,27 +653,20 @@ async function scanDossier() {
         var meta = await metaResp.json();
         var fl = document.getElementById("folderLink");
         fl.innerHTML = "";
-        
-        // Création de la ligne alignée
         var row = document.createElement("div");
         row.className = "fl-row";
-        row.style.marginTop = "8px"; // Espacement avec la ligne du dessus
-        
+        row.style.marginTop = "8px";
         var txt = document.createElement("span");
         txt.className = "fl-lbl";
         txt.textContent = "Dossier concours :";
-        
         var a = document.createElement("a");
         a.href = "https://drive.google.com/drive/folders/" + fid;
         a.target = "_blank";
         a.className = "fl dyn";
         a.textContent = "\uD83D\uDCC2 " + meta.name;
-        
         row.appendChild(txt);
         row.appendChild(a);
         fl.appendChild(row);
-        
-        // Auto-select expéditeur selon antenne
         var antenne = EXP.ant;
         if (!antenne) {
           var fullPath = (EXP.cName || "") + " " + meta.name;
@@ -680,9 +677,9 @@ async function scanDossier() {
         if (antenne === "one") document.getElementById("mailFrom").value = "sav@onefm.ch";
         else if (antenne === "lac") document.getElementById("mailFrom").value = "sav@radiolac.ch";
       }
-    } catch(e2) { /* silencieux */ }
+    } catch(e2) { }
   } catch(e) {
-    box.innerHTML = '<span class="ds-pill err"><span class="ds-dot"></span>Erreur : ' + e.message + '</span>';
+    box.innerHTML = '<div class="fl-row"><span class="fl-lbl"></span><span class="ds-pill err"><span class="ds-dot"></span>Erreur : ' + e.message + '</span></div>';
   }
 }
 function getConfigs() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; } }
