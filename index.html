@@ -311,7 +311,7 @@ select option{background:#2a2a2a;color:#e8e8e8}
         </div>
       </div>
       <div class="field">
-        <label>Lien du dossier "Originaux"</label>
+        <label>ID du dossier "Originaux"</label>
         <input type="text" id="folderID" placeholder="ex: 1EPQqtKR_GgoVxThVVHFf ou lien Drive complet" onblur="scanDossier()" onpaste="extractFolderID(event)">
         <div class="drive-stats" id="driveStats"></div>
       </div>
@@ -712,8 +712,10 @@ async function doEnvoi() {
   try{await writeToSheet(document.getElementById("pdfName").value.trim(),document.getElementById("folderID").value.trim(),document.getElementById("mailFrom").value,document.getElementById("mailSubject").value.trim(),document.getElementById("mailContent").value.trim(),winners);}
   catch(e){document.getElementById("btnSend").disabled=false;setStep(1);showStatus("error","Erreur Google Sheets : "+e.message);return;}
 
-  /* Étape 2 — Déclenchement webhook Make */
+  /* Étape 2 — Reset G1 à "pending" puis déclenchement webhook Make */
   setStep(3);showStatus("loading","Etape 2/3 — Declenchement Make...");
+  try { await sheetsRequest("PUT","/values/GetRowInfos!G1?valueInputOption=RAW",{values:[["pending"]]}); }
+  catch(e) { /* non bloquant */ }
   try {
     await new Promise(function(resolve, reject) {
       var xhr=new XMLHttpRequest();xhr.open("POST",WEBHOOK);xhr.setRequestHeader("Content-Type","application/json");
