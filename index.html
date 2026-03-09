@@ -146,10 +146,10 @@ select option{background:#2a2a2a;color:#e8e8e8}
 .sel-pill{display:none;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid rgba(0,196,122,.3);background:rgba(0,196,122,.08);color:var(--ok);width:fit-content;margin-bottom:4px;}
 .sel-pill.show{display:inline-flex}
 .sel-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
-.explorer{border:1px solid rgba(255,255,255,.12);border-radius:12px;background:linear-gradient(160deg,#1e1e1e,#272727,#1c1c1c);overflow:hidden;max-height:0;opacity:0;transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .25s ease;margin-bottom:6px;}
-.explorer.open{max-height:520px;opacity:1}
+.explorer{border:1px solid rgba(255,255,255,.12);border-radius:12px;background:linear-gradient(160deg,#1e1e1e,#272727,#1c1c1c);display:flex;flex-direction:column;max-height:0;opacity:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .25s ease;margin-bottom:6px;}
+.explorer.open{max-height:520px;opacity:1;overflow:visible;}
 .exp-topbar{height:3px;background:linear-gradient(90deg,#777,#ddd,#aaa,#fff,#999)}
-.exp-body{padding:10px;max-height:390px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent;}
+.exp-body{padding:10px;overflow-y:auto;max-height:360px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent;}
 .exp-body::-webkit-scrollbar{width:5px}
 .exp-body::-webkit-scrollbar-track{background:transparent}
 .exp-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:4px}
@@ -164,7 +164,7 @@ select option{background:#2a2a2a;color:#e8e8e8}
 .ant-chevron{font-size:11px;color:rgba(255,255,255,.28);transition:transform .25s;flex-shrink:0}
 .ant-btn.open-one .ant-chevron,.ant-btn.open-lac .ant-chevron{transform:rotate(90deg);color:rgba(255,255,255,.55)}
 .concours-wrap{overflow:hidden;max-height:0;transition:max-height .3s cubic-bezier(.4,0,.2,1);padding:0 2px}
-.concours-wrap.open{max-height:500px}
+.concours-wrap.open{max-height:2000px}
 .concours-inner{border:1px solid rgba(255,255,255,.07);border-radius:9px;overflow:hidden;margin-bottom:6px;background:rgba(0,0,0,.14)}
 .ci{display:flex;align-items:center;gap:10px;padding:9px 13px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05);}
 .ci:last-of-type{border-bottom:none}
