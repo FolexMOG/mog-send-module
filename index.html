@@ -634,7 +634,8 @@ async function scanDossier() {
       : '<span class="ds-pill err"><span class="ds-dot"></span>0 PDF disponible</span>';
     var pillUtil = '<span class="ds-pill" style="color:rgba(200,200,200,.45)"><span class="ds-dot"></span>' + utilises + '&nbsp;/&nbsp;' + total + ' utilis&eacute;' + (utilises > 1 ? 's' : '') + '</span>';
     box.innerHTML = pillNext + pillStock + pillUtil;
-    // Bouton lien dossier orange
+    
+    // --- PARTIE MODIFIÉE POUR AJOUTER LE TEXTE "Dossier du concours :" ---
     try {
       var metaUrl = "https://www.googleapis.com/drive/v3/files/" + fid + "?fields=name&supportsAllDrives=true";
       var metaResp = await fetch(metaUrl, { headers: { Authorization: "Bearer " + accessToken } });
@@ -642,17 +643,27 @@ async function scanDossier() {
         var meta = await metaResp.json();
         var fl = document.getElementById("folderLink");
         fl.innerHTML = "";
+        
+        // On ajoute d'abord le texte statique
+        var txt = document.createElement("span");
+        txt.style.fontSize = "11px";
+        txt.style.color = "var(--mut)";
+        txt.style.marginLeft = "8px";
+        txt.textContent = "Dossier du concours :";
+        fl.appendChild(txt);
+
+        // On crée et on ajoute le bouton orange
         var a = document.createElement("a");
         a.href = "https://drive.google.com/drive/folders/" + fid;
         a.target = "_blank";
         a.className = "fl dyn";
         a.textContent = "\uD83D\uDCC2 " + meta.name;
         fl.appendChild(a);
+        
         // Auto-select expéditeur selon antenne
         var antenne = EXP.ant;
         if (!antenne) {
           var fullPath = (EXP.cName || "") + " " + meta.name;
-          // Ajouter aussi le nom de base des fichiers PDF
           if (restants.length > 0) fullPath += " " + restants[0];
           if (/one.?fm|onefm/i.test(fullPath)) antenne = "one";
           else if (/radio.?lac|radiolac/i.test(fullPath)) antenne = "lac";
