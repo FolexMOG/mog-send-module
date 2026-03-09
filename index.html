@@ -304,16 +304,16 @@ select option{background:#2a2a2a;color:#e8e8e8}
       <div class="field">
         <label>Nom du fichier PDF (sans numéro et sans extension)</label>
         <input type="text" id="pdfName" placeholder="ex: Billet_Concert_OneFM">
-      </div>
-      <div class="field">
-        <label>ID du dossier "Originaux"</label>
-        <input type="text" id="folderID" placeholder="ex: 1EPQqtKR_GgoVxThVVHFf" onblur="scanDossier()" onpaste="setTimeout(scanDossier,100)">
-        <div class="drive-stats" id="driveStats"></div>
         <div class="folder-links">
           <span style="font-size:11px;color:var(--mut)">Ouvrir dans Drive :</span>
           <a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one">&#128308; Envois One FM</a>
           <a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac">&#128309; Envois Radio Lac</a>
         </div>
+      </div>
+      <div class="field">
+        <label>ID du dossier "Originaux"</label>
+        <input type="text" id="folderID" placeholder="ex: 1EPQqtKR_GgoVxThVVHFf" onblur="scanDossier()" onpaste="setTimeout(scanDossier,100)">
+        <div class="drive-stats" id="driveStats"></div>
       </div>
     </div>
 
@@ -376,7 +376,7 @@ select option{background:#2a2a2a;color:#e8e8e8}
 var CLIENT_ID      = "253709404223-7dk219jfjfn43vitgap2ujdblue4m1v8.apps.googleusercontent.com";
 var SPREADSHEET_ID = "11O24DWCA2pWtEh344R1ABJ10ZsArKCEiBNWC5EWV2wY";
 var WEBHOOK        = "https://hook.eu2.make.com/5fmu4g6onwbg8yjeszd8cchrarfwqjqv";
-var SCOPES         = "https://www.googleapis.com/auth/spreadsheets";
+var SCOPES         = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly";
 var STORAGE_KEY    = "envoi_pdf_configs";
 var gagnants       = [];
 var accessToken    = null;
@@ -487,6 +487,8 @@ async function scanDossier() {
         encodeURIComponent("'" + fid + "' in parents and mimeType='application/pdf' and trashed=false") +
         "&fields=nextPageToken,files(name)" +
         "&pageSize=1000" +
+        "&supportsAllDrives=true" +
+        "&includeItemsFromAllDrives=true" +
         (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
       var resp = await fetch(url, { headers: { Authorization: "Bearer " + accessToken } });
       if (!resp.ok) throw new Error("HTTP " + resp.status);
