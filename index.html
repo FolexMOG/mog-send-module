@@ -106,6 +106,15 @@ textarea{resize:vertical;min-height:142px;line-height:1.65}
 select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(200,200,200,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
 select option{background:#2a2a2a;color:#e8e8e8}
 
+/* ── STATS DRIVE ── */
+.drive-stats{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;min-height:26px}
+.ds-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22)}
+.ds-pill.ok{border-color:rgba(0,196,122,.3);background:rgba(0,196,122,.08);color:var(--ok)}
+.ds-pill.warn{border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.08);color:var(--warn)}
+.ds-pill.err{border-color:rgba(232,0,29,.3);background:rgba(232,0,29,.08);color:#ff6060}
+.ds-pill.loading{color:rgba(220,220,220,.4)}
+.ds-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
 /* ── LIENS DOSSIER ── */
 .folder-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
 .fl{font-size:12px;font-weight:500;padding:5px 10px;border-radius:6px;text-decoration:none;transition:all .2s;border:1px solid var(--bd2)}
@@ -298,7 +307,8 @@ select option{background:#2a2a2a;color:#e8e8e8}
       </div>
       <div class="field">
         <label>ID du dossier "Originaux"</label>
-        <input type="text" id="folderID" placeholder="ex: 1EPQqtKR_GgoVxThVVHFf">
+        <input type="text" id="folderID" placeholder="ex: 1EPQqtKR_GgoVxThVVHFf" onblur="scanDossier()" onpaste="setTimeout(scanDossier,100)">
+        <div class="drive-stats" id="driveStats"></div>
         <div class="folder-links">
           <span style="font-size:11px;color:var(--mut)">Ouvrir dans Drive :</span>
           <a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one">&#128308; Envois One FM</a>
@@ -458,7 +468,73 @@ function setAuthUI(c) {
   document.getElementById("authBtn").className     = c ? "authbtn disconnect" : "authbtn";
 }
 
-/* ── CONFIGS ── */
+/* ── SCAN DOSSIER DRIVE ── */
+async function scanDossier() {
+  var fid = document.getElementById("folderID").value.trim();
+  var box = document.getElementById("driveStats");
+  if (!fid) { box.innerHTML = ""; return; }
+  if (!accessToken) {
+    box.innerHTML = '<span class="ds-pill warn"><span class="ds-dot"></span>Connecte-toi à Google d\'abord</span>';
+    return;
+  }
+  box.innerHTML = '<span class="ds-pill loading"><span class="ds-dot" style="animation:sp .7s linear infinite;border:2px solid rgba(220,220,220,.15);border-top-color:currentColor;border-radius:50%;width:8px;height:8px;background:none"></span>Scan en cours…</span>';
+
+  try {
+    var allFiles = [];
+    var pageToken = "";
+    do {
+      var url = "https://www.googleapis.com/drive/v3/files?q=" +
+        encodeURIComponent("'" + fid + "' in parents and mimeType='application/pdf' and trashed=false") +
+        "&fields=nextPageToken,files(name)" +
+        "&pageSize=1000" +
+        (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
+      var resp = await fetch(url, { headers: { Authorization: "Bearer " + accessToken } });
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      var data = await resp.json();
+      allFiles = allFiles.concat(data.files || []);
+      pageToken = data.nextPageToken || "";
+    } while (pageToken);
+
+    /* Séparer envoyés / non envoyés */
+    var envoyes = [];
+    var restants = [];
+    allFiles.forEach(function(f) {
+      var name = f.name.replace(/\.pdf$/i, "");
+      if (/-envoy[eé]/i.test(name)) { envoyes.push(name); }
+      else { restants.push(name); }
+    });
+
+    /* Extraire les numéros des fichiers restants */
+    var nums = restants.map(function(name) {
+      var m = name.match(/-(\d+)$/);
+      return m ? parseInt(m[1], 10) : null;
+    }).filter(function(n) { return n !== null; }).sort(function(a,b){return a-b;});
+
+    var prochain = nums.length > 0 ? nums[0] : 1;
+    var stock    = restants.length;
+    var total    = allFiles.length;
+
+    /* Mettre à jour le champ startNum */
+    document.getElementById("startNum").value = prochain;
+    renderGagnants();
+
+    /* Afficher les pills */
+    var pillStock = stock > 0
+      ? '<span class="ds-pill ok"><span class="ds-dot"></span>' + stock + ' PDF disponible' + (stock > 1 ? 's' : '') + '</span>'
+      : '<span class="ds-pill err"><span class="ds-dot"></span>0 PDF disponible</span>';
+
+    var pillNext = '<span class="ds-pill ok"><span class="ds-dot"></span>Prochain n° : <strong style="margin-left:3px">' + prochain + '</strong></span>';
+
+    var pillTotal = '<span class="ds-pill" style="color:rgba(200,200,200,.45)"><span class="ds-dot"></span>' + envoyes.length + '&nbsp;/&nbsp;' + total + ' envoyé' + (envoyes.length > 1 ? 's' : '') + '</span>';
+
+    box.innerHTML = pillNext + pillStock + pillTotal;
+
+  } catch(e) {
+    box.innerHTML = '<span class="ds-pill err"><span class="ds-dot"></span>Erreur : ' + e.message + '</span>';
+  }
+}
+
+
 function getConfigs() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; } }
 function setConfigs(o) { localStorage.setItem(STORAGE_KEY, JSON.stringify(o)); }
 function openSaveModal() { document.getElementById("modalInput").value = ""; document.getElementById("modalBg").classList.add("show"); document.getElementById("modalInput").focus(); }
@@ -483,6 +559,7 @@ function loadConfig(name) {
   document.getElementById("mailContent").value = c.mailContent || "";
   document.getElementById("startNum").value    = c.startNum   || "1";
   showStatus("success", "Config chargee : " + name);
+  scanDossier();
 }
 function deleteConfig(name) { var c = getConfigs(); delete c[name]; setConfigs(c); renderSaveSlots(); }
 function renderSaveSlots() {
