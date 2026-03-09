@@ -700,23 +700,66 @@ function closeConfirm(){document.getElementById("confirmBg").classList.remove("s
 function confirmNo(){closeConfirm();showStatus("warn","Process interrupted");}
 function confirmYes(){closeConfirm();showStatus("success","Process MOG Send Node launched");setTimeout(function(){doEnvoi();},600);}
 
+var pollingTimer = null;
+
 async function doEnvoi() {
   var startN=getStart();var winners=[];
   for(var i=0;i<gagnants.length;i++){var id=gagnants[i];winners.push({numero:startN+i,prenom:document.getElementById("pr"+id).value.trim(),nom:document.getElementById("nm"+id).value.trim(),email:document.getElementById("em"+id).value.trim()});}
   document.getElementById("btnSend").disabled=true;
-  setStep(2);showStatus("loading","Etape 1/2 - Ecriture dans Google Sheet...");
+
+  /* Étape 1 — Écriture Sheet */
+  setStep(2);showStatus("loading","Etape 1/3 — Ecriture dans Google Sheet...");
   try{await writeToSheet(document.getElementById("pdfName").value.trim(),document.getElementById("folderID").value.trim(),document.getElementById("mailFrom").value,document.getElementById("mailSubject").value.trim(),document.getElementById("mailContent").value.trim(),winners);}
   catch(e){document.getElementById("btnSend").disabled=false;setStep(1);showStatus("error","Erreur Google Sheets : "+e.message);return;}
-  setStep(3);showStatus("loading","Etape 2/2 - Declenchement Make... "+winners.length+" gagnant"+(winners.length>1?"s":""));
-  var xhr=new XMLHttpRequest();xhr.open("POST",WEBHOOK);xhr.setRequestHeader("Content-Type","application/json");
-  xhr.onload=function(){
+
+  /* Étape 2 — Déclenchement webhook Make */
+  setStep(3);showStatus("loading","Etape 2/3 — Declenchement Make...");
+  try {
+    await new Promise(function(resolve, reject) {
+      var xhr=new XMLHttpRequest();xhr.open("POST",WEBHOOK);xhr.setRequestHeader("Content-Type","application/json");
+      xhr.onload=function(){if(xhr.status>=200&&xhr.status<300)resolve();else reject(new Error("HTTP "+xhr.status));};
+      xhr.onerror=function(){reject(new Error("Reseau KO"));};
+      xhr.send(JSON.stringify({trigger:"html",count:winners.length}));
+    });
+  } catch(e) {
     document.getElementById("btnSend").disabled=false;
-    if(xhr.status>=200&&xhr.status<300){setStep(4);showStatus("success","Sheet ecrite + Make declenche - "+winners.length+" billet"+(winners.length>1?"s":"")+" en cours d'envoi.");}
-    else{setStep(2);showStatus("error","Sheet OK mais webhook refuse (HTTP "+xhr.status+").");}
-  };
-  xhr.onerror=function(){document.getElementById("btnSend").disabled=false;setStep(2);showStatus("error","Sheet OK mais impossible de joindre le webhook.");};
-  xhr.send(JSON.stringify({trigger:"html",count:winners.length}));
+    setStep(2);showStatus("error","Sheet OK mais webhook refuse : "+e.message);
+    return;
+  }
+
+  /* Étape 3 — Polling G1 jusqu'à "done" */
+  setStep(4);
+  var nb = winners.length;
+  showStatus("loading", "Execution en cours — " + nb + " billet" + (nb>1?"s":"") + " en cours d'envoi...");
+  var elapsed = 0;
+  var INTERVAL = 4000;   /* interroge toutes les 4 secondes */
+  var TIMEOUT  = 600000; /* abandonne après 10 minutes */
+  if (pollingTimer) clearInterval(pollingTimer);
+  pollingTimer = setInterval(async function() {
+    elapsed += INTERVAL;
+    if (elapsed >= TIMEOUT) {
+      clearInterval(pollingTimer); pollingTimer = null;
+      document.getElementById("btnSend").disabled=false;
+      showStatus("warn","Timeout — Make n'a pas repondu apres 10 min. Verifie le scenario.");
+      return;
+    }
+    try {
+      var resp = await sheetsRequest("GET", "/values/GetRowInfos!G1");
+      var val = ((resp.values || [[""]])[0] || [""])[0] || "";
+      if (val.trim().toLowerCase() === "done") {
+        clearInterval(pollingTimer); pollingTimer = null;
+        document.getElementById("btnSend").disabled=false;
+        setStep(4);
+        showStatus("success", "✅ Envoi effectue — " + nb + " billet" + (nb>1?"s envoyés":"envoyé") + " avec succes !");
+        /* Relancer le scan du dossier pour mettre à jour les pills */
+        scanDossier();
+      }
+    } catch(e) {
+      /* Erreur réseau passagère — on continue le polling */
+    }
+  }, INTERVAL);
 }
+
 
 function sheetsRequest(method,path,body){
   return new Promise(function(resolve,reject){
