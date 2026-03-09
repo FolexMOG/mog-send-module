@@ -583,6 +583,7 @@ async function scanDossier() {
   var fid = document.getElementById("folderID").value.trim();
   var box = document.getElementById("driveStats");
   document.getElementById("folderLink").innerHTML = "";
+  document.getElementById("pdfName").value = "";
   if (!fid) { box.innerHTML = ""; return; }
   if (!accessToken) {
     box.innerHTML = '<span class="ds-pill warn"><span class="ds-dot"></span>Connecte-toi &agrave; Google</span>';
