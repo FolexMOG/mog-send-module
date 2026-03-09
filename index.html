@@ -623,8 +623,7 @@ async function scanDossier() {
     if (prochain !== null) { document.getElementById("startNum").value = prochain; renderGagnants(); }
     if (restants.length > 0) {
       var baseName = restants[0].replace(/-\d+$/, "");
-      var pdfField = document.getElementById("pdfName");
-      if (!pdfField.value.trim()) { pdfField.value = baseName; }
+      document.getElementById("pdfName").value = baseName;
     }
     var pillNext = (prochain !== null && stock > 0)
       ? '<span class="ds-pill ok"><span class="ds-dot"></span>Prochain n&deg; : <strong style="margin-left:3px">' + prochain + '</strong></span>'
