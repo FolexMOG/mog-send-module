@@ -250,8 +250,8 @@ select option{background:#2a2a2a;color:#e8e8e8}
         <div class="folder-links">
           <div class="fl-row">
             <span class="fl-lbl">Ouvrir dans Drive :</span>
-            <a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one">&#128308; Envois One</a>
-            <a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac">&#128309; Envois Lac</a>
+            <a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one">&#128308; Envois One FM</a>
+            <a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac">&#128309; Envois Radio Lac</a>
           </div>
           <div id="folderLink"></div>
         </div>
@@ -655,12 +655,19 @@ async function scanDossier() {
         var meta = await metaResp.json();
         var fl = document.getElementById("folderLink");
         fl.innerHTML = "";
+        var row = document.createElement("div");
+        row.className = "fl-row";
+        var lbl = document.createElement("span");
+        lbl.className = "fl-lbl";
+        lbl.textContent = "Dossier concours :";
         var a = document.createElement("a");
         a.href = "https://drive.google.com/drive/folders/" + fid;
         a.target = "_blank";
         a.className = "fl dyn";
         a.textContent = "\uD83D\uDCC2 " + meta.name;
-        fl.appendChild(a);
+        row.appendChild(lbl);
+        row.appendChild(a);
+        fl.appendChild(row);
         // Auto-select expéditeur selon antenne
         var antenne = EXP.ant;
         if (!antenne) {
