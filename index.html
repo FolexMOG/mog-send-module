@@ -499,16 +499,11 @@ function closeProgModal() {
 }
 
 function startProgPoll() {
-  var lastVal = "";
-  var polls = 0;
-  var maxPolls = 120;
+  var maxSeen = 0;
+  var noProgressCount = 0;
+  var maxNoProgress = 240; // 2 min sans progression = timeout
   if (progPollInterval) clearInterval(progPollInterval);
   progPollInterval = setInterval(async function() {
-    polls++;
-    if (polls > maxPolls) {
-      clearInterval(progPollInterval); progPollInterval = null;
-      progFinalize(progDone, progTotal - progDone, true); return;
-    }
     try {
       var r = await fetch(
         "https://sheets.googleapis.com/v4/spreadsheets/" + SPREADSHEET_ID +
@@ -517,20 +512,34 @@ function startProgPoll() {
       );
       var d = await r.json();
       var val = ((d.values || [[""]])[0][0] || "").toString().trim();
-      if (!val || val === lastVal) return;
-      lastVal = val;
-      var parts = val.split("/");
-      if (parts.length === 2) {
-        var cur = parseInt(parts[0], 10);
-        var tot = parseInt(parts[1], 10);
-        if (!isNaN(cur) && !isNaN(tot) && tot > 0) {
-          progDone = cur;
-          updateProgUI(cur, tot);
-          if (cur >= tot) {
-            clearInterval(progPollInterval); progPollInterval = null;
-            setTimeout(function() { progFinalize(cur, 0, false); }, 800);
+      if (!val) { noProgressCount++; }
+      else {
+        var parts = val.split("/");
+        if (parts.length === 2) {
+          var cur = parseInt(parts[0], 10);
+          var tot = parseInt(parts[1], 10);
+          if (!isNaN(cur) && !isNaN(tot) && tot > 0) {
+            if (cur > maxSeen) {
+              maxSeen = cur;
+              noProgressCount = 0;
+              progDone = cur;
+              updateProgUI(cur, tot);
+              if (cur >= tot) {
+                clearInterval(progPollInterval); progPollInterval = null;
+                setTimeout(function() { progFinalize(cur, 0, false); }, 800);
+                return;
+              }
+            } else {
+              noProgressCount++;
+            }
           }
+        } else {
+          noProgressCount++;
         }
+      }
+      if (noProgressCount > maxNoProgress) {
+        clearInterval(progPollInterval); progPollInterval = null;
+        progFinalize(maxSeen, progTotal - maxSeen, true);
       }
     } catch(e) { /* silencieux */ }
   }, 500);
