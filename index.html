@@ -546,6 +546,35 @@ function startProgPoll() {
 }
 
 function updateProgUI(cur, tot) {
+  // Animer les lignes intermédiaires si on a sauté des valeurs
+  var prevDone = 0;
+  for (var j = 0; j < progWinners.length; j++) {
+    var r = document.getElementById("prow-" + j);
+    if (r && r.className.indexOf("done") !== -1) prevDone = j + 1;
+  }
+  var gap = cur - prevDone;
+  if (gap > 1) {
+    // Flash spinner sur chaque ligne intermédiaire avant de les marquer done
+    (function animateGap(startIdx, endIdx, callback) {
+      if (startIdx >= endIdx) { callback(); return; }
+      var row = document.getElementById("prow-" + startIdx);
+      var icon = document.getElementById("picon-" + startIdx);
+      if (row) row.className = "prog-row active";
+      if (icon) icon.innerHTML = "<div class='prog-spin'></div>";
+      setTimeout(function() {
+        if (row) row.className = "prog-row done";
+        if (icon) icon.innerHTML = "✅";
+        animateGap(startIdx + 1, endIdx, callback);
+      }, 180);
+    })(prevDone, cur - 1, function() {
+      applyProgUI(cur, tot);
+    });
+  } else {
+    applyProgUI(cur, tot);
+  }
+}
+
+function applyProgUI(cur, tot) {
   var pct = Math.round((cur / tot) * 100);
   document.getElementById("progBarFill").style.width = pct + "%";
   document.getElementById("progBarCount").textContent = cur + " / " + tot;
@@ -561,7 +590,7 @@ function updateProgUI(cur, tot) {
     if (i < cur) {
       row.className = "prog-row done"; icon.innerHTML = "✅";
     } else if (i === cur && cur < tot) {
-      row.className = "prog-row active"; icon.innerHTML = "<div class=\'prog-spin\'></div>";
+      row.className = "prog-row active"; icon.innerHTML = "<div class='prog-spin'></div>";
     } else {
       row.className = "prog-row"; icon.textContent = "⏳";
     }
