@@ -478,6 +478,11 @@ function openProgModal(winners) {
     list.appendChild(row);
   }
   document.getElementById("progBg").classList.add("show");
+  // Activer immédiatement la première ligne en cours
+  var firstRow = document.getElementById("prow-0");
+  var firstIcon = document.getElementById("picon-0");
+  if (firstRow) firstRow.className = "prog-row active";
+  if (firstIcon) firstIcon.innerHTML = "<div class='prog-spin'></div>";
 }
 
 function closeProgModal() {
@@ -520,7 +525,7 @@ function startProgPoll() {
         }
       }
     } catch(e) { /* silencieux */ }
-  }, 3000);
+  }, 500);
 }
 
 function updateProgUI(cur, tot) {
