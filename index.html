@@ -34,7 +34,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .step.done .sn{color:var(--ok)}.step.done{color:rgba(0,196,122,.55)}
 .step.active .sn{color:#fff}.step.active{color:#fff;background:rgba(255,255,255,.05)}
 .card{background:linear-gradient(160deg,#282828,#343434,#262626);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:32px 28px;position:relative;overflow:hidden;box-shadow:0 2px 0 rgba(255,255,255,.07) inset,0 8px 40px rgba(0,0,0,.55);}
-.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#777,#ddd,#aaa,#fff,#999);}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;background:linear-gradient(90deg,#777,#ddd,#aaa,#fff,#999);z-index:2;}
 .sec{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,200,200,.48);margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .sec::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.1)}
 .sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);margin:24px 0}
@@ -178,46 +178,9 @@ select option{background:#2a2a2a;color:#e8e8e8}
 /* ALIGNEMENT LIENS */
 .fl-row{display:flex;align-items:center;gap:8px;min-height:28px;flex-wrap:wrap}
 .fl-lbl{font-size:11px;color:var(--mut);width:105px;flex-shrink:0}
-
-/* ── LOGIN PAGE ── */
-#loginPage{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#181818,#252525,#181818);}
-#loginPage::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
-.login-card{position:relative;z-index:1;background:linear-gradient(160deg,#282828,#343434,#262626);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:48px 40px;width:380px;max-width:92vw;text-align:center;overflow:hidden;box-shadow:0 2px 0 rgba(255,255,255,.07) inset,0 16px 60px rgba(0,0,0,.7);}
-.login-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#777,#ddd,#aaa,#fff,#999);}
-.login-logo{width:72px;height:72px;border-radius:14px;object-fit:cover;margin:0 auto 20px;}
-.login-title{font-family:"Bebas Neue",sans-serif;font-size:32px;letter-spacing:.04em;color:#fff;margin-bottom:6px;}
-.login-sub{font-size:12px;color:var(--mut);letter-spacing:.08em;text-transform:uppercase;margin-bottom:32px;}
-.login-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#e8e8e8;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;justify-content:center;}
-.login-btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);}
-.login-btn svg{width:20px;height:20px;flex-shrink:0;}
-.login-error{margin-top:16px;padding:10px 14px;border-radius:8px;background:rgba(232,0,29,.1);border:1px solid rgba(232,0,29,.3);color:#ff6060;font-size:12px;display:none;}
-.login-error.show{display:block;}
 </style>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/FolexMOG/mog-send-module/ec831aef635d72626a86e03e2efef8a75757865d/One-Lac%20Shade%20Envoi.png">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/FolexMOG/mog-send-module/ec831aef635d72626a86e03e2efef8a75757865d/One-Lac%20Shade%20Envoi.png">
-<link rel="shortcut icon" href="https://raw.githubusercontent.com/FolexMOG/mog-send-module/ec831aef635d72626a86e03e2efef8a75757865d/One-Lac%20Shade%20Envoi.png">
-<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIk1PRyBTZW5kIE1vZHVsZSIsICJzaG9ydF9uYW1lIjogIk1PRyBTZW5kIiwgInN0YXJ0X3VybCI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxODE4MTgiLCAidGhlbWVfY29sb3IiOiAiIzE4MTgxOCIsICJpY29ucyI6IFt7InNyYyI6ICJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vRm9sZXhNT0cvbW9nLXNlbmQtbW9kdWxlL2VjODMxYWVmNjM1ZDcyNjI2YTg2ZTAzZTJlZmVmOGE3NTc1Nzg2NWQvT25lLUxhYyUyMFNoYWRlJTIwRW52b2kucG5nIiwgInNpemVzIjogIjE5MngxOTIiLCAidHlwZSI6ICJpbWFnZS9wbmcifSwgeyJzcmMiOiAiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0ZvbGV4TU9HL21vZy1zZW5kLW1vZHVsZS9lYzgzMWFlZjYzNWQ3MjYyNmE4NmUwM2UyZWZlZjhhNzU3NTc4NjVkL09uZS1MYWMlMjBTaGFkZSUyMEVudm9pLnBuZyIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn1dfQ==">
 </head>
 <body>
-
-<div id="loginPage">
-  <div class="login-card">
-    <img id="loginLogo" class="login-logo" alt="MOG">
-    <div class="login-title">MOG Send Module</div>
-    <div class="login-sub">Outil d&rsquo;envoi PDF &middot; Media One Group</div>
-    <button class="login-btn" id="loginBtn" onclick="doLogin()">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-      </svg>
-      Se connecter avec Google
-    </button>
-    <div class="login-error" id="loginError">Acc&egrave;s refus&eacute;. Utilise un compte @mediaonegroup.ch</div>
-  </div>
-</div>
-
 <div class="gl"></div><div class="go"></div>
 <div class="confirm-bg" id="confirmBg">
   <div class="confirm-box">
@@ -287,8 +250,8 @@ select option{background:#2a2a2a;color:#e8e8e8}
         <div class="folder-links">
           <div class="fl-row">
             <span class="fl-lbl">Ouvrir dans Drive :</span>
-<a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one" style="opacity:.6">Envois One</a>
-<a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac" style="opacity:.6">Envois Lac</a>
+            <a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one">&#128308; Envois One</a>
+            <a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac">&#128309; Envois Lac</a>
           </div>
           <div id="folderLink"></div>
         </div>
@@ -371,64 +334,10 @@ select option{background:#2a2a2a;color:#e8e8e8}
   </div>
 </div>
 <script>
-
-var ALLOWED_DOMAIN = "mediaonegroup.ch";
-var loginClient = null;
-var appUnlocked = false;
-
-function initLoginClient() {
-  var check = setInterval(function() {
-    if (window.google && window.google.accounts) {
-      clearInterval(check);
-      loginClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        prompt: "",
-        callback: function(resp) {
-          if (resp.error) { showLoginError(); return; }
-          // Vérifier le domaine via userinfo
-          fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-            headers: { Authorization: "Bearer " + resp.access_token }
-          }).then(function(r){ return r.json(); }).then(function(info){
-            var email = info.email || "";
-            if (email.endsWith("@" + ALLOWED_DOMAIN)) {
-              accessToken = resp.access_token;
-              unlockApp(email);
-            } else {
-              google.accounts.oauth2.revoke(resp.access_token, function(){});
-              showLoginError();
-            }
-          }).catch(function(){ showLoginError(); });
-        }
-      });
-      // Logo sur page login
-      document.getElementById("loginLogo").src = "https://raw.githubusercontent.com/FolexMOG/mog-send-module/ec831aef635d72626a86e03e2efef8a75757865d/One-Lac%20Shade%20Envoi.png";
-    }
-  }, 200);
-}
-
-function doLogin() {
-  document.getElementById("loginError").classList.remove("show");
-  if (loginClient) loginClient.requestAccessToken();
-}
-
-function showLoginError() {
-  document.getElementById("loginError").classList.add("show");
-}
-
-function unlockApp(email) {
-  appUnlocked = true;
-  document.getElementById("loginPage").style.display = "none";
-  setAuthUI(true);
-  document.getElementById("authLabel").textContent = email;
-}
-
-initLoginClient();
-
 var CLIENT_ID      = "253709404223-7dk219jfjfn43vitgap2ujdblue4m1v8.apps.googleusercontent.com";
 var SPREADSHEET_ID = "11O24DWCA2pWtEh344R1ABJ10ZsArKCEiBNWC5EWV2wY";
 var WEBHOOK        = "https://hook.eu2.make.com/5fmu4g6onwbg8yjeszd8cchrarfwqjqv";
-var SCOPES         = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.metadata.readonly email profile";
+var SCOPES         = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.metadata.readonly";
 var STORAGE_KEY    = "envoi_pdf_configs";
 var ROOT_ONE       = "1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7";
 var ROOT_LAC       = "1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW";
@@ -438,7 +347,10 @@ var tokenClient    = null;
 var EXP = { open:false, ant:null, cId:null, cName:null, selId:null, selName:null, cache:{} };
 
 document.getElementById("logoImg").src = "https://raw.githubusercontent.com/FolexMOG/mog-send-module/ec831aef635d72626a86e03e2efef8a75757865d/One-Lac%20Shade%20Envoi.png";
-
+var lnk = document.createElement("link");
+lnk.rel = "icon"; lnk.type = "image/png";
+lnk.href = "https://raw.githubusercontent.com/FolexMOG/mog-send-module/ec831aef635d72626a86e03e2efef8a75757865d/One-Lac%20Shade%20Envoi.png";
+document.head.appendChild(lnk);
 
 function drawWaveform() {
   var canvas = document.getElementById('waveCanvas');
@@ -481,7 +393,7 @@ window.addEventListener("load", function() {
     if (window.google && window.google.accounts) {
       clearInterval(gsiCheck);
       tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID, scope: SCOPES, prompt: "",
+        client_id: CLIENT_ID, scope: SCOPES,
         callback: function(resp) {
           if (resp.error) { showStatus("error", "Erreur Google : " + resp.error); return; }
           accessToken = resp.access_token; setAuthUI(true);
@@ -493,7 +405,7 @@ window.addEventListener("load", function() {
 window.addEventListener('resize', drawWaveform);
 
 function handleAuth() {
-  if (accessToken) { google.accounts.oauth2.revoke(accessToken, function(){}); accessToken = null; setAuthUI(false); document.getElementById("loginPage").style.display = "flex"; document.getElementById("loginError").classList.remove("show"); }
+  if (accessToken) { google.accounts.oauth2.revoke(accessToken, function(){}); accessToken = null; setAuthUI(false); }
   else { if (tokenClient) tokenClient.requestAccessToken(); else showStatus("error", "Google Sign-In non charge."); }
 }
 function setAuthUI(c) {
@@ -752,7 +664,7 @@ async function scanDossier() {
         a.href = "https://drive.google.com/drive/folders/" + fid;
         a.target = "_blank";
         a.className = "fl dyn";
-        a.textContent = "\uD83D\uDCC2 " + meta.name;
+        a.textContent = meta.name;
         row.appendChild(lbl);
         row.appendChild(a);
         fl.appendChild(row);
