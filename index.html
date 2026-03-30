@@ -636,7 +636,7 @@ function progFinalize(sent, errors, timeout) {
   document.getElementById("btnSend").disabled = false;
 }
 
-var ALLOWED_DOMAINS = ["mediaonegroup.ch", "onefm.ch", "radiolac.ch"];
+var ALLOWED_DOMAIN = "mediaonegroup.ch";
 var loginClient = null;
 var appUnlocked = false;
 
@@ -655,7 +655,7 @@ function initLoginClient() {
             headers: { Authorization: "Bearer " + resp.access_token }
           }).then(function(r){ return r.json(); }).then(function(info){
             var email = info.email || "";
-            if (ALLOWED_DOMAINS.some(function(d){ return email.endsWith("@" + d); })) {
+            if (email.endsWith("@" + ALLOWED_DOMAIN)) {
               accessToken = resp.access_token;
               unlockApp(email);
             } else {
