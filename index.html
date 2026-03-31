@@ -103,6 +103,40 @@ select option{background:#2a2a2a;color:#e8e8e8}
 .sbar.warn{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:var(--warn)}
 .emoji-btn{padding:4px 6px;border-radius:7px;border:1px solid var(--bd);background:transparent;cursor:pointer;font-size:16px;line-height:1;transition:background .15s;}
 .emoji-btn:hover{background:rgba(255,255,255,.09);}
+.emoji-open-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;border:1px solid var(--bd2);background:rgba(255,255,255,.05);color:var(--txt);font-family:"DM Sans",sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
+.emoji-open-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);}
+/* ── EMOJI PICKER ── */
+.picker-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:flex-end;justify-content:center;}
+.picker-bg.show{display:flex;}
+@media(min-width:560px){.picker-bg{align-items:center;}}
+.epicker{background:linear-gradient(160deg,#252525,#2e2e2e,#242424);border:1px solid rgba(255,255,255,.16);border-radius:18px 18px 0 0;width:100%;max-width:520px;max-height:78vh;display:flex;flex-direction:column;box-shadow:0 -4px 40px rgba(0,0,0,.6);overflow:hidden;}
+@media(min-width:560px){.epicker{border-radius:18px;max-height:520px;}}
+.epicker-top{height:3px;background:linear-gradient(90deg,#777,#ddd,#aaa,#fff,#999);flex-shrink:0;}
+.epicker-head{padding:14px 14px 10px;flex-shrink:0;}
+.epicker-head-row{position:relative;display:flex;align-items:center;margin-bottom:10px;}
+.epicker-title{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:.05em;color:#fff;}
+.epicker-close{position:absolute;top:0;right:0;background:transparent;border:none;color:rgba(200,200,200,.4);font-size:20px;cursor:pointer;line-height:1;padding:4px;transition:color .15s;}
+.epicker-close:hover{color:#e8e8e8;}
+.epicker-search-wrap{position:relative;}
+.epicker-search{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);border-radius:9px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:9px 13px 9px 36px;outline:none;transition:border-color .2s;}
+.epicker-search:focus{border-color:rgba(255,255,255,.3);}
+.epicker-search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;opacity:.45;}
+.epicker-cats{display:flex;gap:2px;padding:0 14px 10px;flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.epicker-cats::-webkit-scrollbar{display:none;}
+.ecat-btn{padding:6px 10px;border-radius:8px;border:none;background:transparent;color:rgba(220,220,220,.4);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:5px;}
+.ecat-btn:hover{background:rgba(255,255,255,.06);color:rgba(220,220,220,.75);}
+.ecat-btn.active{background:rgba(255,255,255,.09);color:#fff;}
+.epicker-body{flex:1;overflow-y:auto;padding:4px 10px 14px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent;}
+.epicker-body::-webkit-scrollbar{width:4px;}
+.epicker-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px;}
+.ecat-section{margin-bottom:14px;}
+.ecat-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,200,200,.35);padding:4px 4px 8px;display:flex;align-items:center;gap:8px;}
+.ecat-label::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.07);}
+.emoji-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:2px;}
+.eg{padding:6px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:22px;line-height:1;transition:background .1s,transform .08s;text-align:center;}
+.eg:hover{background:rgba(255,255,255,.1);transform:scale(1.2);}
+.eg:active{transform:scale(1.05);}
+.epicker-no-result{text-align:center;padding:40px 20px;color:rgba(200,200,200,.3);font-size:14px;}
 .spin{width:15px;height:15px;flex-shrink:0;border:2px solid rgba(255,255,255,.1);border-top-color:currentColor;border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .infobox{margin-top:14px;padding:12px 16px;background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:10px;font-size:12px;color:rgba(245,166,35,.8);line-height:1.6;display:flex;gap:10px}
@@ -260,6 +294,23 @@ select option{background:#2a2a2a;color:#e8e8e8}
   </div>
 </div>
 
+<div class="picker-bg" id="pickerBg" onclick="pickerBgClose(event)">
+  <div class="epicker">
+    <div class="epicker-top"></div>
+    <div class="epicker-head">
+      <div class="epicker-head-row">
+        <span class="epicker-title">Emojis</span>
+        <button class="epicker-close" onclick="closePicker()">&#10005;</button>
+      </div>
+      <div class="epicker-search-wrap">
+        <span class="epicker-search-ico">&#128269;</span>
+        <input class="epicker-search" id="emojiSearch" type="text" placeholder="Rechercher un emoji&hellip;" oninput="renderPickerEmojis()" autocomplete="off">
+      </div>
+    </div>
+    <div class="epicker-cats" id="pickerCats"></div>
+    <div class="epicker-body" id="pickerBody"></div>
+  </div>
+</div>
 <div class="prog-bg" id="progBg">
   <div class="prog-box">
     <svg width="0" height="0" style="position:absolute">
@@ -436,6 +487,9 @@ select option{background:#2a2a2a;color:#e8e8e8}
       <button class="emoji-btn" onclick="insertEmoji('🤩')">🤩</button>
       <button class="emoji-btn" onclick="insertEmoji('🗓️')">🗓️</button>
       <button class="emoji-btn" onclick="insertEmoji('📩')">📩</button>
+      </div>
+      <div style="margin-bottom:8px;">
+        <button class="emoji-open-btn" onclick="openPicker()"><span style="font-size:16px;">😀</span> Emojis</button>
       </div>
       <button class="rsetb" onclick="resetForm()">&#8635; R&eacute;initialiser</button>
     </div>
@@ -1242,6 +1296,20 @@ async function writeToSheet(pdfName,folderID,mailFrom,mailSubject,mailContent,wi
   await sheetsRequest("PUT","/values/'Liste envois'!F1?valueInputOption=RAW",{values:[[winners.length]]});
 }
 function insertEmoji(e){var ta=document.getElementById("mailContent");var s=ta.selectionStart,end=ta.selectionEnd;ta.value=ta.value.slice(0,s)+e+ta.value.slice(end);ta.selectionStart=ta.selectionEnd=s+e.length;ta.focus();}
+
+/* ── EMOJI PICKER ── */
+var PICKER_CATS=[{id:"recent",label:"Récents",ico:"🕐"},{id:"music",label:"Musique",ico:"🎵"},{id:"party",label:"Fête",ico:"🎉"},{id:"smileys",label:"Smileys",ico:"😀"},{id:"people",label:"Personnes",ico:"👤"},{id:"nature",label:"Nature",ico:"🌿"},{id:"food",label:"Nourriture",ico:"🍕"},{id:"travel",label:"Voyage",ico:"✈️"},{id:"objects",label:"Objets",ico:"💡"},{id:"symbols",label:"Symboles",ico:"❤️"},{id:"flags",label:"Drapeaux",ico:"🏁"}];
+var PICKER_EMOJIS={music:[{e:"🎵",n:"note de musique"},{e:"🎶",n:"notes de musique"},{e:"🎼",n:"partition musicale"},{e:"🎤",n:"microphone"},{e:"🎙️",n:"microphone studio"},{e:"🎧",n:"écouteurs casque"},{e:"🎸",n:"guitare électrique"},{e:"🎹",n:"piano clavier"},{e:"🥁",n:"batterie tambour"},{e:"🎺",n:"trompette"},{e:"🎻",n:"violon"},{e:"🪗",n:"accordéon"},{e:"🪘",n:"grand tambour"},{e:"🎷",n:"saxophone"},{e:"📻",n:"radio"},{e:"🔊",n:"haut-parleur son"},{e:"🔔",n:"cloche sonnette"},{e:"🎚️",n:"curseur audio"},{e:"🎛️",n:"boutons mixage"},{e:"🎬",n:"clap cinéma"},{e:"🎭",n:"masques théâtre"},{e:"🎪",n:"chapiteau cirque"},{e:"🎟️",n:"billet entrée"},{e:"🎫",n:"ticket billet"}],party:[{e:"🎉",n:"confettis fête anniversaire"},{e:"🎊",n:"boule cotillon fête"},{e:"🥳",n:"chapeau fête"},{e:"🎂",n:"gâteau anniversaire"},{e:"🎁",n:"cadeau présent"},{e:"🎀",n:"ruban nœud"},{e:"🥂",n:"champagne trinquer"},{e:"🍾",n:"bouteille champagne"},{e:"🎆",n:"feux artifice"},{e:"🎇",n:"étincelles sparkler"},{e:"✨",n:"étincelles brillant"},{e:"⭐",n:"étoile"},{e:"🌟",n:"étoile brillante"},{e:"💫",n:"étoile tourbillon"},{e:"🔥",n:"feu flamme"},{e:"🎈",n:"ballon"},{e:"🏆",n:"trophée victoire"},{e:"🥇",n:"médaille or premier"},{e:"🎖️",n:"médaille honneur"},{e:"🏅",n:"médaille sport"}],smileys:[{e:"😀",n:"sourire heureux"},{e:"😃",n:"grand sourire joie"},{e:"😄",n:"rire joie"},{e:"😁",n:"sourire avec dents"},{e:"😆",n:"rire yeux fermés"},{e:"😅",n:"rire sueur"},{e:"🤣",n:"rouler de rire"},{e:"😂",n:"larmes de joie"},{e:"🙂",n:"légèrement souriant"},{e:"😉",n:"clin d'œil"},{e:"😊",n:"sourire yeux plissés"},{e:"😇",n:"ange aureole"},{e:"🥰",n:"amoureux cœur yeux"},{e:"😍",n:"yeux en cœur"},{e:"🤩",n:"étoiles dans les yeux"},{e:"😎",n:"cool lunettes soleil"},{e:"🤗",n:"câlin bras ouverts"},{e:"🥳",n:"fête chapeau"},{e:"😋",n:"délicieux miam"},{e:"😜",n:"tirer langue clin"},{e:"🤪",n:"fou dingue"},{e:"🤑",n:"argent billets yeux"},{e:"🤓",n:"nerd intello"},{e:"🫡",n:"salut respect"}],people:[{e:"👋",n:"salut au revoir"},{e:"🤝",n:"poignée main accord"},{e:"👍",n:"pouce levé bien"},{e:"👎",n:"pouce baissé"},{e:"👏",n:"applaudissements bravo"},{e:"🙌",n:"mains levées célébration"},{e:"🫶",n:"cœur mains"},{e:"❤️",n:"cœur rouge amour"},{e:"💪",n:"biceps force"},{e:"✌️",n:"victoire paix"},{e:"🤞",n:"doigts croisés chance"},{e:"🤘",n:"rock cornes"},{e:"👌",n:"ok parfait"},{e:"🫵",n:"tu toi pointer"},{e:"🙏",n:"merci prière"},{e:"💃",n:"danseuse danse"},{e:"🕺",n:"danseur"},{e:"👨‍🎤",n:"chanteur homme"},{e:"👩‍🎤",n:"chanteuse femme"},{e:"🧑‍🎤",n:"artiste chanteur"}],nature:[{e:"🌟",n:"étoile brillante"},{e:"⭐",n:"étoile"},{e:"🌙",n:"lune croissant"},{e:"☀️",n:"soleil"},{e:"🌈",n:"arc-en-ciel"},{e:"⚡",n:"éclair foudre"},{e:"🌊",n:"vague mer"},{e:"🌸",n:"fleur cerisier"},{e:"🌺",n:"fleur hibiscus"},{e:"🌻",n:"tournesol"},{e:"🌹",n:"rose"},{e:"💐",n:"bouquet fleurs"},{e:"🍀",n:"trèfle chance"},{e:"🌿",n:"herbe plante"},{e:"🍃",n:"feuilles vent"},{e:"🦋",n:"papillon"},{e:"🐝",n:"abeille miel"},{e:"🦅",n:"aigle"},{e:"🦜",n:"perroquet"},{e:"🦚",n:"paon"}],food:[{e:"🍕",n:"pizza"},{e:"🍔",n:"burger hamburger"},{e:"🌮",n:"taco"},{e:"🍣",n:"sushi"},{e:"🍜",n:"ramen nouilles"},{e:"🍰",n:"part gâteau"},{e:"🎂",n:"gâteau anniversaire"},{e:"🍩",n:"donut beignet"},{e:"🍫",n:"chocolat"},{e:"🍭",n:"sucette bonbon"},{e:"🍦",n:"glace cornet"},{e:"☕",n:"café thé"},{e:"🥂",n:"champagne verre"},{e:"🍾",n:"bouteille champagne"},{e:"🍷",n:"vin rouge"},{e:"🍹",n:"cocktail tropical"},{e:"🧁",n:"cupcake muffin"}],travel:[{e:"✈️",n:"avion voyage"},{e:"🚀",n:"fusée lancement"},{e:"🚗",n:"voiture auto"},{e:"🚌",n:"bus autobus"},{e:"🚂",n:"train locomotive"},{e:"🏖️",n:"plage vacances"},{e:"🏔️",n:"montagne neige"},{e:"🗼",n:"tour Eiffel Paris"},{e:"🗽",n:"statue liberté"},{e:"🌍",n:"globe Europe Afrique"},{e:"🌎",n:"globe Amériques"},{e:"🌏",n:"globe Asie"},{e:"📍",n:"épingle position"},{e:"🗺️",n:"carte monde"},{e:"🧳",n:"valise voyage"},{e:"🎒",n:"sac à dos"},{e:"📸",n:"appareil photo"}],objects:[{e:"💡",n:"ampoule idée"},{e:"🔑",n:"clé serrure"},{e:"🏆",n:"trophée récompense"},{e:"🎁",n:"cadeau présent"},{e:"📱",n:"téléphone mobile"},{e:"💻",n:"ordinateur portable"},{e:"📺",n:"télévision TV"},{e:"📻",n:"radio"},{e:"🔊",n:"haut-parleur volume"},{e:"🎙️",n:"microphone studio"},{e:"📡",n:"antenne satellite"},{e:"💌",n:"lettre amour message"},{e:"📩",n:"email entrant"},{e:"📨",n:"enveloppe entrante"},{e:"📅",n:"calendrier date"},{e:"🗓️",n:"calendrier spirale"},{e:"📌",n:"épingle punaise"},{e:"✏️",n:"crayon"},{e:"📝",n:"bloc-notes memo"},{e:"🔍",n:"loupe recherche"},{e:"🔔",n:"cloche notification"}],symbols:[{e:"❤️",n:"cœur rouge amour"},{e:"🧡",n:"cœur orange"},{e:"💛",n:"cœur jaune"},{e:"💚",n:"cœur vert"},{e:"💙",n:"cœur bleu"},{e:"💜",n:"cœur violet"},{e:"🖤",n:"cœur noir"},{e:"🤍",n:"cœur blanc"},{e:"💯",n:"cent pour cent parfait"},{e:"✅",n:"coche validé ok"},{e:"⚠️",n:"attention avertissement"},{e:"💥",n:"explosion impact"},{e:"✨",n:"étincelles brillant"},{e:"🔥",n:"feu tendance"},{e:"💫",n:"tourbillon étoile"},{e:"♾️",n:"infini illimité"},{e:"▶️",n:"lecture play"},{e:"🔁",n:"répéter boucle"},{e:"🔀",n:"mélanger aléatoire"}],flags:[{e:"🇫🇷",n:"drapeau France"},{e:"🇨🇭",n:"drapeau Suisse"},{e:"🇧🇪",n:"drapeau Belgique"},{e:"🇨🇦",n:"drapeau Canada"},{e:"🇺🇸",n:"drapeau USA"},{e:"🇬🇧",n:"drapeau Royaume-Uni"},{e:"🇩🇪",n:"drapeau Allemagne"},{e:"🇮🇹",n:"drapeau Italie"},{e:"🇪🇸",n:"drapeau Espagne"},{e:"🇯🇵",n:"drapeau Japon"},{e:"🇧🇷",n:"drapeau Brésil"},{e:"🇲🇦",n:"drapeau Maroc"},{e:"🏳️‍🌈",n:"drapeau arc-en-ciel pride"}]};
+var pickerCurCat="music";
+var pickerRecent=[];
+function openPicker(){pickerRecent=JSON.parse(localStorage.getItem("emojiRecent")||"[]");pickerCurCat=pickerRecent.length?"recent":"music";document.getElementById("emojiSearch").value="";renderPickerCats();renderPickerEmojis();document.getElementById("pickerBg").classList.add("show");setTimeout(function(){document.getElementById("emojiSearch").focus();},80);}
+function closePicker(){document.getElementById("pickerBg").classList.remove("show");}
+function pickerBgClose(e){if(e.target===document.getElementById("pickerBg"))closePicker();}
+function renderPickerCats(){var c=document.getElementById("pickerCats");c.innerHTML="";PICKER_CATS.forEach(function(cat){if(cat.id==="recent"&&!pickerRecent.length)return;var b=document.createElement("button");b.className="ecat-btn"+(cat.id===pickerCurCat?" active":"");b.innerHTML='<span style="font-size:15px">'+cat.ico+'</span>'+cat.label;b.onclick=(function(id){return function(){pickerCurCat=id;document.getElementById("emojiSearch").value="";renderPickerCats();renderPickerEmojis();};})(cat.id);c.appendChild(b);});}
+function renderPickerEmojis(){var body=document.getElementById("pickerBody");var q=document.getElementById("emojiSearch").value.trim().toLowerCase();body.innerHTML="";if(q){var res=[];Object.keys(PICKER_EMOJIS).forEach(function(cid){PICKER_EMOJIS[cid].forEach(function(em){if(em.n.toLowerCase().indexOf(q)!==-1||em.e===q){if(!res.find(function(r){return r.e===em.e;}))res.push(em);}});});if(!res.length){body.innerHTML='<div class="epicker-no-result">Aucun résultat pour «\u00a0'+q+'\u00a0»</div>';return;}var grid=document.createElement("div");grid.className="emoji-grid";res.forEach(function(em){grid.appendChild(makePickerBtn(em));});body.appendChild(grid);return;}if(pickerCurCat==="recent"){var sec=makePickerSection("Récemment utilisés");var grid=document.createElement("div");grid.className="emoji-grid";pickerRecent.slice(0,40).forEach(function(e){grid.appendChild(makePickerBtn({e:e,n:e}));});sec.appendChild(grid);body.appendChild(sec);}else{var cat=PICKER_CATS.find(function(c){return c.id===pickerCurCat;});if(!cat||!PICKER_EMOJIS[pickerCurCat])return;var sec=makePickerSection(cat.ico+"  "+cat.label);var grid=document.createElement("div");grid.className="emoji-grid";PICKER_EMOJIS[pickerCurCat].forEach(function(em){grid.appendChild(makePickerBtn(em));});sec.appendChild(grid);body.appendChild(sec);}}
+function makePickerSection(label){var s=document.createElement("div");s.className="ecat-section";var l=document.createElement("div");l.className="ecat-label";l.textContent=label;s.appendChild(l);return s;}
+function makePickerBtn(em){var b=document.createElement("button");b.className="eg";b.textContent=em.e;b.title=em.n;b.onclick=function(){pickerInsert(em.e);};return b;}
+function pickerInsert(emoji){pickerRecent=pickerRecent.filter(function(e){return e!==emoji;});pickerRecent.unshift(emoji);if(pickerRecent.length>40)pickerRecent.pop();localStorage.setItem("emojiRecent",JSON.stringify(pickerRecent));insertEmoji(emoji);closePicker();}
 function showStatus(type,msg){var bar=document.getElementById("sbar");bar.className="sbar show "+type;document.getElementById("stxt").textContent=msg;document.getElementById("spin").style.display=type==="loading"?"block":"none";}
 function setStep(n){for(var i=1;i<=4;i++){document.getElementById("s"+i).className="step"+(i<n?" done":i===n?" active":"");}}
 function resetForm(){
