@@ -1124,7 +1124,7 @@ function renderGagnants() {
     var ip=document.createElement("input");ip.type="text";ip.id="pr"+id;ip.placeholder="Pr\u00e9nom";ip.value=s.pr;
     var inm=document.createElement("input");inm.type="text";inm.id="nm"+id;inm.placeholder="Nom";inm.value=s.nm;
     var ie=document.createElement("input");ie.type="email";ie.id="em"+id;ie.placeholder="email@exemple.com";ie.value=s.em;
-    fields.appendChild(ip);fields.appendChild(inm);fields.appendChild(ie);
+    fields.appendChild(inm);fields.appendChild(ip);fields.appendChild(ie);
     var rb=document.createElement("button");rb.className="rmb";rb.textContent="x";
     (function(rmid){rb.onclick=function(){removeGagnant(rmid);};})(id);
     row.appendChild(badge);row.appendChild(fields);row.appendChild(rb);block.appendChild(row);
