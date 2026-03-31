@@ -381,10 +381,12 @@ select option{background:#2a2a2a;color:#e8e8e8}
             </div>
             <div id="pdfNameWrap" style="display:none;">
               <label>Nom du fichier PDF d&eacute;tect&eacute;</label>
-              <input type="text" id="pdfName" readonly style="cursor:default;opacity:.65;pointer-events:none;margin-top:6px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                <input type="text" id="pdfName" readonly style="cursor:default;opacity:.65;pointer-events:none;flex:1;">
+                <div id="folderLink"></div>
+              </div>
             </div>
             <div class="drive-stats" id="driveStats"></div>
-            <div id="folderLink"></div>
           </div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             <button class="browse-btn" id="browseBtn" onclick="browseToggle()">&#128194; Parcourir</button>
