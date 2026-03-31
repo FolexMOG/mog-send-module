@@ -356,18 +356,6 @@ select option{background:#2a2a2a;color:#e8e8e8}
     </div>
     <div class="row">
       <div class="field">
-        <label>Nom du fichier PDF (sans num&eacute;ro et sans extension)</label>
-        <input type="text" id="pdfName" placeholder="ex: Billet_Concert_OneFM">
-        <div class="folder-links">
-          <div class="fl-row">
-            <span class="fl-lbl">Ouvrir dans Drive :</span>
-<a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one" style="opacity:.6">Envois One</a>
-<a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac" style="opacity:.6">Envois Lac</a>
-          </div>
-          <div id="folderLink"></div>
-        </div>
-      </div>
-      <div class="field">
         <label>Lien du dossier &quot;Originaux&quot;</label>
         <div class="folder-row">
           <input type="text" id="folderID" placeholder="Colle un lien Drive ou clique Parcourir" onblur="scanDossier()" onpaste="extractFolderID(event)">
@@ -392,6 +380,18 @@ select option{background:#2a2a2a;color:#e8e8e8}
               <button class="exp-ok" id="expOk" onclick="expConfirm()">S&#201;LECTIONNER</button>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nom du fichier PDF (sans num&eacute;ro et sans extension)</label>
+        <input type="text" id="pdfName" placeholder="ex: Billet_Concert_OneFM">
+        <div class="folder-links">
+          <div class="fl-row">
+            <span class="fl-lbl">Ouvrir dans Drive :</span>
+<a href="https://drive.google.com/drive/u/0/folders/1EPQqtKR_GgoVxThVVHFfEyvlGXVhpMY7" target="_blank" class="fl one" style="opacity:.6">Envois One</a>
+<a href="https://drive.google.com/drive/u/0/folders/1Oi6tJ-MLYmuv64tBxmfoj86pPNSxvFgW" target="_blank" class="fl lac" style="opacity:.6">Envois Lac</a>
+          </div>
+          <div id="folderLink"></div>
         </div>
       </div>
     </div>
